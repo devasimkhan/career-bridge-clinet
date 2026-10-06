@@ -12,8 +12,7 @@ import dashboardService from '../services/dashboardService';
 import roadmapService from '../services/roadmapService';
 import LoadingScreen from '../components/LoadingScreen';
 import toast from 'react-hot-toast';
-
-const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || 'http://localhost:5050';
+import { SOCKET_URL } from '../config';
 
 export default function StudentDashboard() {
 

@@ -1,7 +1,16 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 export default function NotFoundPage() {
+  const { user } = useSelector((state) => state.auth);
+
+  const getProfilePath = () => {
+    if (user?.userType === "ADMIN") return "/auth/admin";
+    if (user?.userType === "COUNSELOR") return "/auth/counselor";
+    return "/auth/profile";
+  };
+
   return (
     <div
       className="min-h-screen w-full flex items-center justify-center p-6 bg-[#f5f5fb] bg-[radial-gradient(#c9c9d9_1.2px,transparent_1.2px)] bg-[length:22px_22px]"
@@ -40,17 +49,17 @@ export default function NotFoundPage() {
 
         {/* actions */}
         <div className="flex flex-col gap-3 mb-8">
-          <a
-            href="/"
+          <Link
+            to={user ? getProfilePath() : "/"}
             className="w-full text-center bg-amber-400 hover:bg-amber-500 transition-colors border-2 border-slate-900 rounded-full py-3 font-extrabold text-slate-900 tracking-wide"
           >
-            GO TO DASHBOARD &rarr;
-          </a>
+            {user ? "GO TO USER PROFILE →" : "GO TO HOME →"}
+          </Link>
           <Link
-            to="/login"
+            to={user ? getProfilePath() : "/login"}
             className="w-full text-center bg-sky-100 hover:bg-sky-200 transition-colors border-2 border-slate-900 rounded-full py-3 font-bold text-slate-900"
           >
-            Back to Login
+            {user ? "Back to User Profile" : "Back to Login"}
           </Link>
         </div>
 

@@ -62,8 +62,8 @@ export default function Navbar() {
   const navItems = user?.userType === 'ADMIN'
     ? adminNav
     : user?.userType === 'COUNSELOR'
-    ? counselorNav
-    : studentNav;
+      ? counselorNav
+      : studentNav;
 
   return (
     <>
@@ -172,11 +172,10 @@ export default function Navbar() {
                     key={item.id}
                     to={item.link}
                     onClick={() => setMobileMenuOpen(false)}
-                    className={`flex items-center justify-between px-3.5 py-3 rounded-xl border-2 border-navy font-grotesk font-bold text-sm transition-all ${
-                      isActive
+                    className={`flex items-center justify-between px-3.5 py-3 rounded-xl border-2 border-navy font-grotesk font-bold text-sm transition-all ${isActive
                         ? "bg-yellow text-navy shadow-pop-sm translate-x-0.5"
                         : "bg-parchment text-navy hover:bg-parchment-dim"
-                    }`}
+                      }`}
                   >
                     <div className="flex items-center gap-3">
                       <span className="text-xl">{item.icon}</span>

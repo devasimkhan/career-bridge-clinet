@@ -77,20 +77,52 @@ export default function RegisterPage() {
     mutate(payload);
   };
 
+  // useEffect(() => {
+  //   if (isSuccess && data) {
+  //     dispatch(setUser(data));
+  //     toast.success('Account created successfully');
+  //   }
+  //   if (user?.userType) {
+  //     if (user.userType === 'ADMIN') navigate('/auth/admin', { replace: true });
+  //     else if (user.userType === 'COUNSELOR') navigate('/auth/counselor', { replace: true });
+  //     else navigate('/auth/profile', { replace: true });
+  //   }
+  //   if (isError && error) {
+  //     toast.error(error?.response?.data?.message || error?.message || 'Registration failed');
+  //   }
+  // }, [isSuccess, data, user?.userType, isError, error]);
+  // 1. Success
   useEffect(() => {
     if (isSuccess && data) {
       dispatch(setUser(data));
-      toast.success('Account created successfully');
+      toast.success("Account created successfully");
     }
-    if (user?.userType) {
-      if (user.userType === 'ADMIN') navigate('/auth/admin', { replace: true });
-      else if (user.userType === 'COUNSELOR') navigate('/auth/counselor', { replace: true });
-      else navigate('/auth/profile', { replace: true });
+  }, [isSuccess, data, dispatch]);
+
+
+  // 2. Navigation
+  useEffect(() => {
+    if (!user?.userType) return;
+
+    if (user.userType === "ADMIN") {
+      navigate("/auth/admin");
+    } else if (user.userType === "COUNSELOR") {
+      navigate("/auth/counselor");
+    } else {
+      navigate("/auth/profile");
     }
+  }, [user?.userType, navigate]);
+
+
+  // 3. Errors
+  useEffect(() => {
     if (isError && error) {
-      toast.error(error?.response?.data?.message || error?.message || 'Registration failed');
+      toast.error(
+        error?.response?.data?.message || "Registration failed"
+      );
     }
-  }, [isSuccess, data, user?.userType, isError, error]);
+  }, [isError, error]);
+
 
   if (isPending) {
     return <LoadingScreen loadingMessage="Creating your account..." />;

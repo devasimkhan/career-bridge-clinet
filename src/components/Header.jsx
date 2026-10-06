@@ -1,11 +1,32 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Menu, X, ArrowRight, Compass, Users, Sparkles, Coins, LogIn, UserPlus } from 'lucide-react';
+import { useSelector } from 'react-redux';
+import { Menu, X, ArrowRight, Compass, Users, Sparkles, Coins, LogIn, UserPlus, User } from 'lucide-react';
 
 export const Header = () => {
+  const { user } = useSelector((state) => state.auth);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
+
+  const getProfilePath = () => {
+    if (user?.userType === 'ADMIN') return '/auth/admin';
+    if (user?.userType === 'COUNSELOR') return '/auth/counselor';
+    return '/auth/profile';
+  };
+
+  const getDisplayName = () => {
+    if (user?.name) return user.name;
+    if (user?.userType === 'ADMIN') return 'Admin';
+    if (user?.userType === 'COUNSELOR') return 'Counselor';
+    return 'User';
+  };
+
+  const getRoleLabel = () => {
+    if (user?.userType === 'ADMIN') return 'Admin';
+    if (user?.userType === 'COUNSELOR') return 'Counselor';
+    return 'Student';
+  };
 
   // Close mobile menu on route change or screen resize
   useEffect(() => {
@@ -96,22 +117,47 @@ export const Header = () => {
 
           {/* Right Action buttons */}
           <div className="flex items-center gap-2 sm:gap-4">
-            {location.pathname !== '/login' && (
+            {user ? (
               <Link
-                to="/login"
-                className="font-grotesk font-bold text-xs sm:text-sm text-parchment-dim hover:text-white px-2 sm:px-3 py-1.5 rounded-lg transition-colors whitespace-nowrap"
+                to={getProfilePath()}
+                className="bg-yellow hover:bg-yellow-fixed text-navy font-grotesk font-extrabold text-xs sm:text-sm px-3 sm:px-4 py-1.5 sm:py-2 rounded-full border-2 border-navy shadow-pop-sm active:translate-x-0.5 active:translate-y-0.5 transition-all whitespace-nowrap flex items-center gap-2"
               >
-                Log In
+                <div className="w-6 h-6 rounded-full bg-sky border border-navy flex items-center justify-center font-grotesk font-bold text-xs text-navy overflow-hidden shrink-0">
+                  {user?.profilePic ? (
+                    <img src={user.profilePic} alt={getDisplayName()} className="w-full h-full object-cover" />
+                  ) : (
+                    getDisplayName()?.[0] || (user?.userType === 'ADMIN' ? 'A' : user?.userType === 'COUNSELOR' ? 'C' : 'U')
+                  )}
+                </div>
+                <div className="flex flex-col items-start leading-tight text-left">
+                  <span className="font-grotesk font-extrabold text-xs text-navy truncate max-w-[120px] sm:max-w-[160px]">
+                    {getDisplayName()}
+                  </span>
+                  <span className="font-mono text-[9px] font-bold text-navy/70 uppercase">
+                    {getRoleLabel()} • Back to Profile →
+                  </span>
+                </div>
               </Link>
-            )}
-            {location.pathname !== '/register' && (
-              <Link
-                to="/register"
-                className="bg-rust text-white font-grotesk font-bold text-[11px] sm:text-xs px-3 sm:px-5 py-2 sm:py-2.5 rounded-full border border-navy shadow-pop-sm hover:bg-rust/90 active:translate-x-0.5 active:translate-y-0.5 transition-all whitespace-nowrap flex items-center gap-1"
-              >
-                <span>Get Started</span>
-                <ArrowRight size={14} />
-              </Link>
+            ) : (
+              <>
+                {location.pathname !== '/login' && (
+                  <Link
+                    to="/login"
+                    className="font-grotesk font-bold text-xs sm:text-sm text-parchment-dim hover:text-white px-2 sm:px-3 py-1.5 rounded-lg transition-colors whitespace-nowrap"
+                  >
+                    Log In
+                  </Link>
+                )}
+                {location.pathname !== '/register' && (
+                  <Link
+                    to="/register"
+                    className="bg-rust text-white font-grotesk font-bold text-[11px] sm:text-xs px-3 sm:px-5 py-2 sm:py-2.5 rounded-full border border-navy shadow-pop-sm hover:bg-rust/90 active:translate-x-0.5 active:translate-y-0.5 transition-all whitespace-nowrap flex items-center gap-1"
+                  >
+                    <span>Get Started</span>
+                    <ArrowRight size={14} />
+                  </Link>
+                )}
+              </>
             )}
           </div>
         </div>
@@ -153,23 +199,50 @@ export const Header = () => {
 
             {/* Auth Buttons */}
             <div className="p-4 pt-2 border-t border-navy-light flex flex-col gap-2.5">
-              <Link
-                to="/login"
-                onClick={() => setMobileMenuOpen(false)}
-                className={`w-full flex items-center justify-center gap-2 border-2 border-yellow text-yellow bg-navy py-2.5 px-4 rounded-xl font-grotesk font-bold text-sm shadow-pop-sm active:translate-x-0.5 active:translate-y-0.5 transition-all ${location.pathname === '/login' ? 'bg-yellow/10 ring-2 ring-yellow' : ''
-                  }`}
-              >
-                <LogIn size={16} />
-                <span>Log In</span>
-              </Link>
-              <Link
-                to="/register"
-                onClick={() => setMobileMenuOpen(false)}
-                className="w-full flex items-center justify-center gap-2 bg-rust hover:bg-rust/90 text-white border-2 border-navy py-2.5 px-4 rounded-xl font-grotesk font-bold text-sm shadow-pop-sm active:translate-x-0.5 active:translate-y-0.5 transition-all"
-              >
-                <UserPlus size={16} />
-                <span>Get Started Free</span>
-              </Link>
+              {user ? (
+                <Link
+                  to={getProfilePath()}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="w-full flex items-center justify-between gap-2 bg-yellow hover:bg-yellow-fixed text-navy border-2 border-navy py-2.5 px-4 rounded-xl font-grotesk font-bold text-sm shadow-pop-sm active:translate-x-0.5 active:translate-y-0.5 transition-all"
+                >
+                  <div className="flex items-center gap-2.5 min-w-0">
+                    <div className="w-8 h-8 rounded-full bg-sky border border-navy flex items-center justify-center font-bold text-xs text-navy shrink-0 overflow-hidden">
+                      {user?.profilePic ? (
+                        <img src={user.profilePic} alt={getDisplayName()} className="w-full h-full object-cover" />
+                      ) : (
+                        getDisplayName()?.[0] || 'U'
+                      )}
+                    </div>
+                    <div className="flex flex-col min-w-0 text-left">
+                      <span className="font-extrabold truncate text-sm">{getDisplayName()}</span>
+                      <span className="font-mono text-[10px] text-navy/70 uppercase font-bold">
+                        {getRoleLabel()} • Back to Profile
+                      </span>
+                    </div>
+                  </div>
+                  <ArrowRight size={16} className="shrink-0" />
+                </Link>
+              ) : (
+                <>
+                  <Link
+                    to="/login"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={`w-full flex items-center justify-center gap-2 border-2 border-yellow text-yellow bg-navy py-2.5 px-4 rounded-xl font-grotesk font-bold text-sm shadow-pop-sm active:translate-x-0.5 active:translate-y-0.5 transition-all ${location.pathname === '/login' ? 'bg-yellow/10 ring-2 ring-yellow' : ''
+                      }`}
+                  >
+                    <LogIn size={16} />
+                    <span>Log In</span>
+                  </Link>
+                  <Link
+                    to="/register"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="w-full flex items-center justify-center gap-2 bg-rust hover:bg-rust/90 text-white border-2 border-navy py-2.5 px-4 rounded-xl font-grotesk font-bold text-sm shadow-pop-sm active:translate-x-0.5 active:translate-y-0.5 transition-all"
+                  >
+                    <UserPlus size={16} />
+                    <span>Get Started Free</span>
+                  </Link>
+                </>
+              )}
             </div>
           </div>
         </div>
@@ -177,6 +250,3 @@ export const Header = () => {
     </>
   );
 };
-
-
-

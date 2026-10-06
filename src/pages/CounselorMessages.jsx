@@ -1,4 +1,4 @@
-﻿import Navbar from "../components/Navbar";
+import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
 import Button from "../components/Button";
 import LoadingScreen from "../components/LoadingScreen";
@@ -9,8 +9,7 @@ import { useEffect, useRef, useState } from "react";
 import { io } from "socket.io-client";
 import toast from "react-hot-toast";
 import messageServices from "../services/messageService";
-
-const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || "http://localhost:5050";
+import { SOCKET_URL } from "../config";
 
 // /auth/counselor/messages — sirf student messages, real-time updates, click → direct chat
 export default function CounselorMessages() {

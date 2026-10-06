@@ -58,8 +58,18 @@ export default function CounselorDashboard() {
   });
 
   // Click karne par seedha us student ka chat page
-  const openStudentChat = () => {
-    navigate("/auth/counselor/reviews");
+  // const openStudentChat = () => {
+  //   navigate("/auth/counselor/messages");
+  // };
+  // const openReviews = () => {
+  //   navigate("/auth/counselor/reviews");
+  // };
+  const openStudentChat = (studentId) => {
+    navigate(`/auth/counselor/messages?studentId${studentId}`);
+  };
+
+  const openReviews = () => {
+    navigate(`/auth/counselor/reviews`);
   };
 
   if (isLoading && !counselors) {
@@ -257,7 +267,7 @@ export default function CounselorDashboard() {
                       return (
                         <div
                           key={rev._id}
-                          onClick={() => reviewerId && openStudentChat(reviewerId)}
+                          onClick={() => reviewerId && openReviews(reviewerId)}
                           className="bg-parchment border-2 border-navy p-4 rounded-2xl shadow-pop-sm cursor-pointer hover:bg-parchment-dim transition-all"
                         >
                           <div className="flex justify-between items-center mb-1">

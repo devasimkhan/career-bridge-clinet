@@ -1,8 +1,18 @@
 
 import StatusBadge from '../components/StatusBadge';
 import { Header } from '../components/Header';
+import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 export default function LandingPage() {
+  const { user } = useSelector((state) => state.auth);
+
+  const getProfilePath = () => {
+    if (user?.userType === 'ADMIN') return '/auth/admin';
+    if (user?.userType === 'COUNSELOR') return '/auth/counselor';
+    return '/auth/profile';
+  };
+
   const stats = [
     { number: '500+', label: 'Students Guided Across India', note: 'IITs, NITs & State Universities' },
     { number: '80+', label: 'Verified Industry Mentors', note: 'Ex-Google, Swiggy, Microsoft' },
@@ -71,7 +81,7 @@ export default function LandingPage() {
   return (
     <div className="min-h-screen bg-parchment text-navy overflow-x-hidden font-body antialiased selection:bg-yellow selection:text-navy">
       {/* 1. Header / Nav (Solid Navy Band matching StudentDashboard.jsx top bar style) */}
-      <Header/>
+      <Header />
       {/* 2. Hero Section (Parchment canvas with generous whitespace & Space Grotesk Medium title + Trajectory SVG) */}
       <section className="max-w-7xl mx-auto px-6 lg:px-12 py-12 sm:py-16 lg:py-28 relative overflow-hidden">
         {/* Quiet Trajectory Line Background SVG (Moment 1 of visual richness) */}
@@ -98,12 +108,12 @@ export default function LandingPage() {
           </p>
 
           <div className="mt-8 flex flex-col sm:flex-row items-start sm:items-center space-y-3 sm:space-y-0 sm:space-x-4">
-            <button
-              type="button"
-              className="bg-rust text-white font-grotesk font-medium text-sm px-7 py-3.5 rounded-full border border-navy hover:bg-rust/90 transition-all"
+            <Link
+              to={user ? getProfilePath() : "/register"}
+              className="bg-rust text-white font-grotesk font-medium text-sm px-7 py-3.5 rounded-full border border-navy hover:bg-rust/90 transition-all inline-block"
             >
-              Get started free (100 Credits) →
-            </button>
+              {user ? `Back to ${user.name} Profile →` : `Get started free (100 Credits) →`}
+            </Link>
             <span className="font-mono text-xs text-navy-muted">
               ✓ No credit card required • Instant access
             </span>
@@ -112,7 +122,7 @@ export default function LandingPage() {
       </section>
 
       {/* 3. Trust Strip (Space Mono numerals texture matching MyCredits.jsx) */}
-      <section className="border-y-2 border-navy/20 bg-parchment-card py-12 px-6 lg:px-12">
+      <section className="border-y-2 border-navy/20 bg-parchment-card py-12 px-6  lg:px-12">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {stats.map((st, idx) => (
@@ -222,12 +232,12 @@ export default function LandingPage() {
               </div>
 
               <div className="mt-8 pt-4 border-t border-navy">
-                <button
-                  type="button"
-                  className="w-full bg-rust text-white font-grotesk font-medium text-sm py-3 rounded-full border border-navy hover:bg-rust/90 transition-all"
+                <Link
+                  to={user ? getProfilePath() : "/register"}
+                  className="w-full text-center bg-rust text-white font-grotesk font-medium text-sm py-3 rounded-full border border-navy hover:bg-rust/90 transition-all block"
                 >
-                  Create Free Student Account →
-                </button>
+                  {user ? `Go to ${user.name} Dashboard →` : "Create Free Student Account →"}
+                </Link>
               </div>
             </div>
 
@@ -259,12 +269,12 @@ export default function LandingPage() {
               </div>
 
               <div className="mt-8 pt-4 border-t border-navy">
-                <button
-                  type="button"
-                  className="w-full bg-navy text-white font-grotesk font-medium text-sm py-3 rounded-full border border-navy hover:bg-navy-light transition-all"
+                <Link
+                  to={user?.userType === 'COUNSELOR' ? "/auth/counselor" : (user ? "/auth/profile/become-counselor" : "/register")}
+                  className="w-full text-center bg-navy text-white font-grotesk font-medium text-sm py-3 rounded-full border border-navy hover:bg-navy-light transition-all block"
                 >
-                  Apply as Counselor Partner →
-                </button>
+                  {user?.userType === 'COUNSELOR' ? "Go to Counselor Dashboard →" : "Apply as Counselor Partner →"}
+                </Link>
               </div>
             </div>
           </div>
@@ -387,12 +397,12 @@ export default function LandingPage() {
           </p>
 
           <div className="pt-4 flex justify-center">
-            <button
-              type="button"
-              className="bg-rust text-white font-grotesk font-medium text-sm px-8 py-4 rounded-full border border-navy hover:bg-rust/90 transition-all"
+            <Link
+              to={user ? getProfilePath() : "/register"}
+              className="bg-rust text-white font-grotesk font-medium text-sm px-8 py-4 rounded-full border border-navy hover:bg-rust/90 transition-all inline-block"
             >
-              CLAIM 100 FREE CREDITS & GET STARTED →
-            </button>
+              {user ? `BACK TO ${user.name.toUpperCase()} PROFILE →` : "CLAIM 100 FREE CREDITS & GET STARTED →"}
+            </Link>
           </div>
         </div>
       </section>

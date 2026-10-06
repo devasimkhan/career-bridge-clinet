@@ -6,8 +6,10 @@ import axios from 'axios'
 import { Provider } from 'react-redux'
 import store from './features/store.js'
 
-if (import.meta.env.VITE_API_URL) {
-  axios.defaults.baseURL = import.meta.env.VITE_API_URL;
+import { BASE_URL } from './config.js'
+
+if (BASE_URL) {
+  axios.defaults.baseURL = BASE_URL;
 }
 
 ReactDOM.createRoot(document.getElementById('root')).render(

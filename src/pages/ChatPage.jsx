@@ -14,8 +14,7 @@ import toast from "react-hot-toast";
 import counselorServices from "../services/counselorService";
 import messageServices from "../services/messageService";
 import LoadingScreen from "../components/LoadingScreen";
-
-const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || "http://localhost:5050";
+import { SOCKET_URL } from "../config";
 
 export default function ChatPage() {
   const { user } = useSelector((state) => state.auth);

@@ -1,4 +1,4 @@
-﻿import Navbar from "../components/Navbar";
+import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
 import ChatBubble from "../components/ChatBubble";
 import Button from "../components/Button";
@@ -10,8 +10,7 @@ import { useQuery } from "@tanstack/react-query";
 import { io } from "socket.io-client";
 import toast from "react-hot-toast";
 import messageServices from "../services/messageService";
-
-const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || "http://localhost:5050";
+import { SOCKET_URL } from "../config";
 
 // Seedha 1-to-1 chat — counselor ke liye direct student chat
 export default function DirectChat() {

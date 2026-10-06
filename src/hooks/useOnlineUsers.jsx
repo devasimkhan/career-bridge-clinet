@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { io } from 'socket.io-client';
-
-const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || 'http://localhost:5050';
+import { SOCKET_URL } from '../config';
 
 // Realtime online presence — socket se live online users ki list.
 // Counselor online aaye/jaaye to turant update (initial list + live events).
